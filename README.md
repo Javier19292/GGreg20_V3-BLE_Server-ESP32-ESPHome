@@ -2,7 +2,15 @@
 
 # GGreg20_V3 Geiger counter BLE server using ESP32 with ESPHome firmware 
 
-This repository provides an example of how to leverage ESPHome firmware on the [GGreg20_V3](https://iot-devices.com.ua/en/product/ggreg20_v3-ionizing-radiation-detector-with-geiger-tube-sbm-20/) to implement a Bluetooth Low Energy (BLE) server. This setup enables the wireless transmission of Geiger counter measurements from your GGreg20_V3 to any compatible client application that can connect to it. A common example of such a client is a smartphone application.
+This repository provides an example of how to leverage ESPHome firmware on the [GGreg20_V3](https://iot-devices.com.ua/en/product/ggreg20_v3-ionizing-radiation-detector-with-geiger-tube-sbm-20/) to implement a Bluetooth Low Energy (BLE) server device. This setup enables the wireless transmission of Geiger counter measurements from your GGreg20_V3 to any compatible client application that can connect to it. A common example of such a client is a smartphone application.
+
+## nRF Connect BLE Debug Tool Scan
+### BLE Server General Device data
+![image](https://github.com/user-attachments/assets/8d886d59-2113-4d47-b68d-c07453ed5e90)
+
+### BLE Server GATT Service and Characteristics data
+![image](https://github.com/user-attachments/assets/bd255b1c-fff3-4bb1-aac0-f94331040e8f)
+
 
 ## BLE Server Side
 For this setup, we're using an ESP32 as the MCU. This component choice is quite appealing: an ESP32 flashed with ESPHome firmware is perfectly capable of running its BLE server functions completely autonomously. What's more, if you have a Home Assistant server, the ESP32 will also transmit data to it.
