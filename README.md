@@ -28,6 +28,7 @@ In this example, we believe that the rest of the calculations should be done on 
         - id: cpm_ma5_characteristic
           uuid: "0cf388bb-d350-58b5-9bfa-c6e33000b8e5"
 ```
+## GGreg20_V3 and ESP32 Wiring
 > For Connection Diagrams please visit: [GGreg20_V3 with generic ESP32 under Home Assistant with ESPHome setup example -> The three options are shown in the following figures](https://github.com/iotdevicesdev/GGreg20_V3-ESP32-HomeAssistant-ESPHome/tree/main#the-three-options-are-shown-in-the-following-figures)
 
 ## BLE Client Application Side 
