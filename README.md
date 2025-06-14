@@ -1,3 +1,5 @@
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner-direct-team.svg)](https://stand-with-ukraine.pp.ua)
+
 # GGreg20_V3 Geiger counter BLE server using ESP32 with ESPHome firmware 
 
 This repository provides an example of how to leverage ESPHome firmware on the GGreg20_V3 to implement a Bluetooth Low Energy (BLE) server. This setup enables the wireless transmission of Geiger counter measurements from your GGreg20_V3 to any compatible client application that can connect to it. A common example of such a client is a smartphone application.
