@@ -4,6 +4,7 @@
 
 This repository provides an example of how to leverage ESPHome firmware on the [GGreg20_V3](https://iot-devices.com.ua/en/product/ggreg20_v3-ionizing-radiation-detector-with-geiger-tube-sbm-20/) to implement a Bluetooth Low Energy (BLE) server. This setup enables the wireless transmission of Geiger counter measurements from your GGreg20_V3 to any compatible client application that can connect to it. A common example of such a client is a smartphone application.
 
+# BLE Server Side
 For this setup, we're using an ESP32 as the MCU. This component choice is quite appealing: an ESP32 flashed with ESPHome firmware is perfectly capable of running its BLE server functions completely autonomously. What's more, if you have a Home Assistant server, the ESP32 will also transmit data to it.
 
 On the ESP32 BLE Server side of the ESPHome firmware for ESP32, we create only two sensors - one for the instant CPM value and the other for the 5 minute moving average CPM value. Accordingly, for BLE, we create one service with two characteristics. Since GATT (See Bluetooth SIG Assigned Numbers) does not have an assigned UUID number for the geiger counter service, we use custom UUIDs that we generated for our project ourselves.
@@ -28,3 +29,12 @@ In this example, we believe that the rest of the calculations should be done on 
           uuid: "0cf388bb-d350-58b5-9bfa-c6e33000b8e5"
 ```
 > For Connection Diagrams please visit: [GGreg20_V3 with generic ESP32 under Home Assistant with ESPHome setup example -> The three options are shown in the following figures](https://github.com/iotdevicesdev/GGreg20_V3-ESP32-HomeAssistant-ESPHome/tree/main#the-three-options-are-shown-in-the-following-figures)
+
+## BLE Client Application Side 
+We have already developed an Android app. We plan to upload it to Google Play in the coming days. As soon as this happens, we will definitely inform about it. As for the iPhone app, we have no clear plans yet. And the Android app is not a commercial product, but only an example that we plan to make available to everyone.
+
+Here is a screenshot:
+
+![image](https://github.com/user-attachments/assets/f332fd33-6982-4d9f-9554-24711a82e6de)
+
+
