@@ -1,0 +1,107 @@
+esphome:
+  name: "ggreg20-v3-esp32-ble-server"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+  level: VERBOSE #makes uart stream available in esphome logstream
+##  baud_rate: 0 #disable logging over uart
+
+# Enable Home Assistant API
+api:
+
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esphome-GGreg20-V3-ESP32"
+    password: "vgcSNevqmK33"
+
+captive_portal:
+
+# ESP32 BLE Server configuration
+esp32_ble_server:
+  manufacturer: "IoT-devices, LLC"
+  model: "GGreg20_V3 Geiger Counter"
+  firmware_version: "1.0.2"
+  on_connect:
+    - lambda: |-
+        ESP_LOGD("BLE", "Client connected with ID: %d", id);
+  on_disconnect:
+    - lambda: |-
+        ESP_LOGD("BLE", "Client disconnected with ID: %d", id);
+  services:
+    # Radiation Monitoring Service
+    - uuid: "decccc6a-5126-5d0f-9951-cbe8fcf57724"
+      advertise: true
+      characteristics:
+        # CPM as a string
+        - id: cpm_characteristic
+          uuid: "2257ebe9-664d-5623-b78b-1d462ea39bea"
+          description: "Ionizing Radiation CPM"
+          read: true
+          notify: true
+          value:
+            data: !lambda |-
+              std::string cpm_str = to_string((int)id(my_cpm_meter).state);
+              return std::vector<uint8_t>(cpm_str.begin(), cpm_str.end());
+            
+        # CPM Moving Average as a string
+        - id: cpm_ma5_characteristic
+          uuid: "0cf388bb-d350-58b5-9bfa-c6e33000b8e5"
+          description: "Ionizing Radiation CPM MA5"
+          read: true
+          notify: true
+          value:
+            data: !lambda |-
+              std::string cpm_ma5_str = to_string((int)id(my_cpm_meter_ma5).state);
+              return std::vector<uint8_t>(cpm_ma5_str.begin(), cpm_ma5_str.end());
+
+sensor:
+- platform: pulse_counter
+  pin:
+    number: 23
+    inverted: True
+    mode: 
+      input: True 
+      # No pullup or pulldown on ESP32 side because of internal pullup set in hardware at GGreg20_V3 pulse output side
+      pullup: False
+      pulldown: False
+  unit_of_measurement: 'CPM'
+  name: 'Ionizing Radiation Power CPM'
+  count_mode: 
+    rising_edge: DISABLE
+    falling_edge: INCREMENT # GGreg20_V3 uses Active-Low logic
+#  use_pcnt: False
+#  internal_filter: 190us # for SBM20 tube, for J305 tube use 180us
+  update_interval: 60s
+  accuracy_decimals: 0
+  id: my_cpm_meter
+  on_value:
+    then:
+      - ble_server.characteristic.notify:
+          id: cpm_characteristic
+
+- platform: copy
+  source_id: my_cpm_meter
+  unit_of_measurement: 'CPM'
+  name: 'Ionizing Radiation Power CPM MA5'
+  accuracy_decimals: 0
+  id: my_cpm_meter_ma5
+  filters:
+    - sliding_window_moving_average: # 5-minutes moving average (MA5) here
+        window_size: 5
+        send_every: 1
+  on_value:
+    then:
+      - ble_server.characteristic.notify:
+          id: cpm_ma5_characteristic
