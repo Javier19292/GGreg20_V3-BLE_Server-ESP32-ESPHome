@@ -8,7 +8,7 @@ For this setup, we're using an ESP32 as the MCU. This component choice is quite 
 
 ![image](https://github.com/user-attachments/assets/175fc242-507c-4678-b0d4-040ed92edbd4)
 
-Please do not modify the UUIDs specified in this example. It's crucial to keep them as-is, as changing these BLE GATT UUID services or UUID characteristics could lead to incompatibility with other services we may develop in the future.
+⚠️ Please do not modify the UUIDs specified in this example. It's crucial to keep them as-is, as changing these BLE/GATT service-UUID or characteristic-UUIDs could lead to incompatibility with other services we may develop in the future.
 ```YAML
   services:
     # Radiation Monitoring Service
@@ -23,3 +23,4 @@ Please do not modify the UUIDs specified in this example. It's crucial to keep t
         - id: cpm_ma5_characteristic
           uuid: "0cf388bb-d350-58b5-9bfa-c6e33000b8e5"
 ```
+> For Connection Diagrams please visit: [GGreg20_V3 with generic ESP32 under Home Assistant with ESPHome setup example -> The three options are shown in the following figures](https://github.com/iotdevicesdev/GGreg20_V3-ESP32-HomeAssistant-ESPHome/tree/main#the-three-options-are-shown-in-the-following-figures)
